@@ -1,0 +1,28 @@
+<div id="login">
+    <div class="px-wrapper">
+        <div class="px-logo">
+            Project<span>X</span>
+        </div>
+        <div class="px-content">
+            <div class="row">
+                <form spellcheck="false">
+                    <div class="input-field teal-text">
+                        <input id="user" type="email" class="validate" readonly onfocus="this.removeAttribute('readonly');">
+                        <label for="user" data-error="wrong" data-success="">User</label>
+                    </div>
+                    <div class="input-field teal-text">
+                        <input id="password" type="password" class="validate">
+                        <label for="password">Password</label>
+                    </div>
+                </form>
+                <div class="px-actions">
+                    <div class="px-checkbox">
+                        <input type="checkbox" id="remember"/>
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <div class="waves-effect waves-light btn" ng-click="vm.login()">login</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
