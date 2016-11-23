@@ -26,6 +26,16 @@ public class Users {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
+    ResponseEntity<?> edit(@RequestBody UserModel userModel, @PathVariable Long userId) {
+        UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logger.info("Editing user '" + userModel + "'.");
+        userModel = userService.add(userModel);
+        logger.info("Successfully edited user '" + userModel + "'.");
+        return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.OK);
+    }
+
     // TODO: 11/2/16 de separat callurile la repo in alt modul
     // TODO: 11/3/16 configurat loggerul
     @PreAuthorize("hasAnyAuthority('ADMIN')")
