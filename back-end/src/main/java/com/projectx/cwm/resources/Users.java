@@ -12,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 /**
  * Created by sl0 on 10/31/16.
  */
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users/")
 public class Users {
     private final UserService userService;
-    Logger logger = Logger.getLogger(Users.class);
+    private final Logger logger = Logger.getLogger(Users.class);
 
     @Autowired
     public Users(UserService userService) {
@@ -29,14 +31,28 @@ public class Users {
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
     ResponseEntity<?> edit(@RequestBody UserModel userModel, @PathVariable Long userId) {
+
         UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         logger.info("Editing user '" + userModel + "'.");
-        userModel = userService.add(userModel);
+        userModel = userService.edit(userModel, userId, loggedUser);
         logger.info("Successfully edited user '" + userModel + "'.");
+
         return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.OK);
     }
 
-    // TODO: 11/2/16 de separat callurile la repo in alt modul
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @RequestMapping(method = RequestMethod.GET)
+    ResponseEntity<?> getUsers() {
+        UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        logger.info("Getting all users.");
+        Set<UserModel> userModels = userService.getUsers(loggedUser);
+        logger.info("Successfully got all users.");
+        return new ResponseEntity<>(userModels, new HttpHeaders(), HttpStatus.CREATED);
+
+    }
+
     // TODO: 11/3/16 configurat loggerul
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
@@ -45,7 +61,7 @@ public class Users {
         UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         logger.info("Adding user '" + userModel + "'.");
-        UserModel user = userService.add(userModel);
+        UserModel user = userService.add(userModel, loggedUser);
         logger.info("Successfully added user '" + user + "'.");
 
         return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CREATED);
@@ -54,11 +70,13 @@ public class Users {
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     ResponseEntity<?> delete(@PathVariable Long userId) {
+
         UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         logger.info("Deleting user '" + userId + "'.");
 
         userService.delete(userId, loggedUser);
+
         return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.OK);
     }
 

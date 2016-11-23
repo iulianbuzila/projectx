@@ -1,6 +1,7 @@
 package com.projectx.cwm.configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * Created by sl0 on 11/16/16.
  */
 @Configuration
+@ComponentScan(basePackages = "com.projectx.cwm")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
