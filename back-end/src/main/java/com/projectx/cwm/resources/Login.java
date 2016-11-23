@@ -1,7 +1,7 @@
 package com.projectx.cwm.resources;
 
-import com.projectx.cwm.domain.User;
-import com.projectx.cwm.services.UserService;
+import com.projectx.cwm.models.UserModel;
+import com.projectx.cwm.services.LoginService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,23 +19,22 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequestMapping("/api/login")
 public class Login {
-    private final UserService userService;
+    private final LoginService loginService;
     Logger logger = Logger.getLogger(Login.class);
 
     @Autowired
-    public Login(UserService userService) {
-        this.userService = userService;
+    public Login(LoginService loginService) {
+        this.loginService = loginService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<?> add(@RequestBody User user) {
-        logger.info("Logging in '" + user + "'.");
-        user = userService.add(user);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(ServletUriComponentsBuilder
-                .fromCurrentRequest().build().toUri());
-        logger.info("Successfully logged in user '" + user + "'.");
-        return new ResponseEntity<>(null, httpHeaders, HttpStatus.ACCEPTED);
+    ResponseEntity<?> add(@RequestBody UserModel userModel) {
+        logger.info("Logging in '" + userModel + "'.");
+
+        userModel = loginService.logIn(userModel);
+
+        logger.info("Successfully logged in user '" + userModel + "'.");
+        return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.ACCEPTED);
 
     }
 }

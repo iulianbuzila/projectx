@@ -12,10 +12,11 @@ import java.util.List;
 /**
  * Created by sl0 on 11/16/16.
  */
-public class UserLoginDetails implements UserDetails{
+public class UserLoginDetails implements UserDetails {
     private String username;
     private String password;
     private String role;
+
     public UserLoginDetails(User user) {
         username = user.getUsername();
         password = user.getPassword();

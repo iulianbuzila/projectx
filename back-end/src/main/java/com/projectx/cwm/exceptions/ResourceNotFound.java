@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Created by sl0 on 11/17/16.
  */
-@ResponseStatus(HttpStatus.NO_CONTENT)
-public class ResourceNotFound extends Throwable {
+@ResponseStatus(HttpStatus.GONE)
+public class ResourceNotFound extends RuntimeException {
+    public ResourceNotFound(String resourceName) {
+        super("Resource not found " + resourceName + ".");
+    }
 }

@@ -1,9 +1,10 @@
 package com.projectx.cwm.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 /**
  * Created by sl0 on 11/2/16.
@@ -11,18 +12,11 @@ import javax.persistence.Entity;
 @Entity
 public class User extends AbstractPersistable<Long> {
 
-    public String username;
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", role='" + role + '\'' +
-                '}';
-    }
-
-    public String password;
-    public String role;
+    private String username;
+    private String password;
+    private String role;
+    @OneToMany(mappedBy = "user")
+    private Set<UserGroup> userGroup;
 
     public User(String username, String password, String role) {
         this.username = username;
@@ -35,7 +29,23 @@ public class User extends AbstractPersistable<Long> {
         this.password = password;
     }
 
-    User() {
+    public User() {
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
+
+    public Set<UserGroup> getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(Set<UserGroup> userGroup) {
+        this.userGroup = userGroup;
     }
 
     public String getUsername() {
