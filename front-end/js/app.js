@@ -1,5 +1,5 @@
 var $APP = $APP || {};
-$APP.server = 'http://192.168.1.58:8081/';
+$APP.server = 'http://localhost:8081/';
 $APP.name = 'projectx'
 
 Storage.prototype.setObject = function(key, value) {

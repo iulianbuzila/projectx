@@ -11,7 +11,7 @@ function AuthService($http, $timeout) {
     function login(data) {
         return $http({
                 method: 'POST',
-                url: $APP.server + 'api/login',
+                url: $APP.server + 'api/login/',
                 headers: {
                     'Authorization': "Basic " + window.btoa(data.username + ":" + data.password)
                 },

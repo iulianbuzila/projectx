@@ -14,76 +14,91 @@ function UserService($http, $timeout) {
 
     function get(id) {
         return $http({
-                method: 'GET',
-                url: $APP.server + 'api/users',
-                parms: {
-                    id: id
-                }
-            })
-            .success(function(result) {
+            method: 'GET',
+            url: $APP.server + 'api/users',
+            headers: {
+                'Authorization': "Basic " + window.btoa("admin:admin")
+            },
+            parms: {
+                id: id
+            }
+        })
+            .success(function (result) {
                 return result;
             })
-            .error(function(data, status) {
+            .error(function (data, status) {
                 return status;
             })
     }
 
     function list() {
         return $http({
-                method: 'GET',
-                url: $APP.server + 'api/users/',
-            })
-            .success(function(result) {
+            method: 'GET',
+            url: $APP.server + 'api/users/',
+            headers: {
+                'Authorization': "Basic " + window.btoa("admin:admin")
+            },
+        })
+            .success(function (result) {
                 return result;
             })
-            .error(function(data, status) {
+            .error(function (data, status) {
                 return status;
             })
     }
 
     function create(data) {
         return $http({
-                method: 'POST',
-                url: $APP.server + 'api/users',
-                data: data
-            })
-            .success(function(result) {
+            method: 'POST',
+            url: $APP.server + 'api/users/',
+            headers: {
+                'Authorization': "Basic " + window.btoa("admin:admin")
+            },
+            data: data
+        })
+            .success(function (result) {
                 return result;
             })
-            .error(function(data, status) {
+            .error(function (data, status) {
                 return status;
             })
     }
 
     function update(id, data) {
         return $http({
-                method: 'PUT',
-                url: $APP.server + 'api/users',
-                params: {
-                    userId: id
-                },
-                data: data
-            })
-            .success(function(result) {
+            method: 'PUT',
+            url: $APP.server + 'api/users/' + id,
+            headers: {
+                'Authorization': "Basic " + window.btoa("admin:admin")
+            },
+            // params: {
+            //     userId: id
+            // },
+            data: data
+        })
+            .success(function (result) {
                 return result;
             })
-            .error(function(data, status) {
+            .error(function (data, status) {
                 return status;
             })
     }
 
     function remove(id) {
         return $http({
-                method: 'DELETE',
-                url: $APP.server + 'api/users',
-                params: {
-                    userId: id
-                }
-            })
-            .success(function(result) {
+            method: 'DELETE',
+            url: $APP.server + 'api/users/' + id,
+            headers: {
+                'Authorization': "Basic " + window.btoa("admin:admin")
+            },
+            // params: {
+            //     userId: id
+            // }
+        })
+            .success(function (result) {
                 return result;
             })
-            .error(function(data, status) {
+            .error(function (data, status) {
                 return status;
             })
     }

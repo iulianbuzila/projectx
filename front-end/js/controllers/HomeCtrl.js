@@ -52,7 +52,7 @@ function HomeCtrl($rootScope, $timeout, UserService, AuthService) {
         // console.log(vm.user);
     }
     function remove() {
-        UserService.update(vm.user.id)
+        UserService.remove(vm.user.id)
         // console.log(vm.user);
     }
 
