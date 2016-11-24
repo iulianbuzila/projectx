@@ -7,17 +7,17 @@
             <div class="row">
                 <form spellcheck="false">
                     <div class="input-field teal-text">
-                        <input id="user" type="email" class="validate" readonly onfocus="this.removeAttribute('readonly');">
-                        <label for="user" data-error="wrong" data-success="">User</label>
+                        <input id="user" type="text"  readonly onfocus="this.removeAttribute('readonly');" ng-model="vm.user.username">
+                        <label for="user">User</label>
                     </div>
                     <div class="input-field teal-text">
-                        <input id="password" type="password" class="validate">
+                        <input id="password" type="password"  readonly onfocus="this.removeAttribute('readonly');" ng-model="vm.user.password">
                         <label for="password">Password</label>
                     </div>
                 </form>
                 <div class="px-actions">
                     <div class="px-checkbox">
-                        <input type="checkbox" id="remember"/>
+                        <input type="checkbox" id="remember" ng-model="vm.user.remember"/>
                         <label for="remember">Remember me</label>
                     </div>
                     <div class="waves-effect waves-light btn" ng-click="vm.login()">login</div>

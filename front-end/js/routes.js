@@ -15,7 +15,7 @@ function appconfig($stateProvider, $urlRouterProvider) {
         .state('app.home', {
             url: "home",
             templateUrl: "templates/home.html",
-            controller: "HomeCtrl"
+            controller: "HomeCtrl as vm"
         })
     $urlRouterProvider.otherwise('/login'); //hardcoded for start
 }

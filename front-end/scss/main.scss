@@ -11,6 +11,27 @@
     }
 }
 
+.nav-wrapper.row:after {
+    display: inline;
+}
+
+.select-wrapper+label {
+    top: -16px;
+}
+
+tr.active {
+    background-color: #b2dfdb !important;
+}
+
+.btn-floating {
+    float: right;
+    margin-top: -13px;
+
+    i {
+        padding-left: 4px;
+    }
+}
+
 #login {
     position: relative;
     background-color: #efefef;
@@ -68,8 +89,8 @@
     }
 }
 
-.px-home{
-  .col{
-    background-color: #aaa;
-  }
+.px-home {
+    .col {
+        background-color: #aaa;
+    }
 }
