@@ -121,5 +121,22 @@ function UserService($http, $timeout) {
             })
     }
 
+    function forgotPassword(data) {
+        return $http({
+            method: 'POST',
+            url: $APP.server + 'api/users/resetPassword',
+            headers: {
+            },
+            withCredentials: true,
+            data: data
+        })
+            .success(function(result) {
+                return result
+            })
+            .error(function(data, status) {
+                return status;
+            })
+    }
+
 
 }
