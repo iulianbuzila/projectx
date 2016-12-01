@@ -17,5 +17,10 @@ function appconfig($stateProvider, $urlRouterProvider) {
             templateUrl: "templates/home.html",
             controller: "HomeCtrl as vm"
         })
+        .state('app.forgotPassword', {
+            url: "forgotPassword",
+            templateUrl: "templates/forgotPassword.html",
+            controller: "ForgotPasswordCtrl as vm"
+        })
     $urlRouterProvider.otherwise('/login'); //hardcoded for start
 }

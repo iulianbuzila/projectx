@@ -15,13 +15,15 @@ public class User extends AbstractPersistable<Long> {
     private String username;
     private String password;
     private String role;
+    private String email;
     @OneToMany(mappedBy = "user")
     private Set<UserGroup> userGroup;
 
-    public User(String username, String password, String role) {
+    public User(String username, String password, String role, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.email = email;
     }
 
     public User(String name, String password) {
@@ -70,5 +72,13 @@ public class User extends AbstractPersistable<Long> {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

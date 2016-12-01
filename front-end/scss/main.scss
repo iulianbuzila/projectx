@@ -94,3 +94,55 @@ tr.active {
         background-color: #aaa;
     }
 }
+
+#forgotPassword {
+    position: relative;
+    background-color: #efefef;
+    background-image: url("../img/bg.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+    background-size: cover;
+    height: 100%;
+
+    .px-wrapper {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .px-logo {
+        text-align: center;
+        font-size: 70px;
+        font-weight: 100;
+        color: #fff;
+        margin-top: 13%;
+
+        span {
+            margin-lefT: 20px;
+            color: #009688;
+        }
+    }
+
+    .px-content {
+        width: 400px;
+        margin: 0 auto;
+
+        form {
+            .input-field input[type=email].valid{
+                border-bottom: 1px solid #009688;
+                box-shadow: 0 1px 0 0 #0a2c29;
+            }
+            margin: 0;
+        }
+
+        .px-actions {
+            .btn {
+                width: 100%;
+                font-weight: 100;
+            }
+        }
+    }
+}

@@ -85,4 +85,14 @@ public class Users {
     UserModel readUser(@PathVariable Long userId) {
         return this.userService.getUser(userId);
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'CONTRIBUTOR', 'READER')")
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    ResponseEntity<?> forgotPassword(@RequestBody UserModel userModel) {
+        logger.info("Forgot password '" + userModel.getEmail() + "'.");
+
+        userService.forgotPassword(userModel.getEmail());
+
+        return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.OK);
+    }
 }

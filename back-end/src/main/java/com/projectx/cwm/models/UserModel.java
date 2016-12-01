@@ -10,15 +10,18 @@ public class UserModel {
     private String username;
     private String role;
     private String password;
-    public UserModel(String username, String password, String role) {
+    private String email;
+    public UserModel(String username, String password, String role, String email) {
         this.username = username;
         this.role = role;
         this.password = password;
+        this.email = email;
     }
     public UserModel(User user) {
         id = user.getId();
         username = user.getUsername();
         role = user.getRole();
+        email = user.getEmail();
     }
 
     public UserModel() {
@@ -61,6 +64,15 @@ public class UserModel {
         return "UserModel{" +
                 "username='" + username + '\'' +
                 ", role='" + role + '\'' +
+                ", email='" + email + '\'' +
                 '}';
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
