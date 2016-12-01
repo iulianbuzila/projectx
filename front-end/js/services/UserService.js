@@ -8,7 +8,8 @@ function UserService($http, $timeout) {
         list: list,
         create: create,
         update: update,
-        remove: remove
+        remove: remove,
+        forgotPassword: forgotPassword
     }
     return service;
 
@@ -99,6 +100,23 @@ function UserService($http, $timeout) {
                 return result;
             })
             .error(function (data, status) {
+                return status;
+            })
+    }
+    
+    function forgotPassword(data) {
+        return $http({
+            method: 'POST',
+            url: $APP.server + 'api/users/resetPassword',
+            headers: {
+            },
+            withCredentials: true,
+            data: data
+        })
+            .success(function(result) {
+                return result
+            })
+            .error(function(data, status) {
                 return status;
             })
     }

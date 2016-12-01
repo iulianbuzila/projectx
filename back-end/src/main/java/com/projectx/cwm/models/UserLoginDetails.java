@@ -16,11 +16,13 @@ public class UserLoginDetails implements UserDetails {
     private String username;
     private String password;
     private String role;
+    private String email;
 
     public UserLoginDetails(User user) {
         username = user.getUsername();
         password = user.getPassword();
         role = user.getRole();
+        email = user.getEmail();
     }
 
     @Override
@@ -58,5 +60,13 @@ public class UserLoginDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

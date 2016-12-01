@@ -11,6 +11,7 @@ function LoginCtrl($rootScope, $state, AuthService, $timeout) {
     }
 
     vm.login = login;
+    vm.forgotPassword = forgotPassword;
 
     if(localStorage.getObject('px.user.remember')){
       vm.user = localStorage.getObject('px.user.remember');
@@ -36,5 +37,9 @@ function LoginCtrl($rootScope, $state, AuthService, $timeout) {
                     $('#password').addClass('invalid')
                 });
             })
+    }
+
+    function forgotPassword() {
+        $state.go('app.forgotPassword');
     }
 }
