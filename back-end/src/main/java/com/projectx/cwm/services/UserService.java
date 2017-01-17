@@ -15,6 +15,7 @@ import it.ozimov.springboot.templating.mail.service.EmailService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.AddressException;
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final Logger logger = Logger.getLogger(UserService.class);
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public EmailService emailService;
@@ -48,8 +52,9 @@ public class UserService {
         }
         User newUser = new User();
         newUser.setUsername(userModel.getUsername());
-        newUser.setPassword(userModel.getPassword());
-        newUser.setRole(userModel.getRole());
+        newUser.setPassword(bCryptPasswordEncoder.encode(userModel.getPassword()));
+        newUser.setEmail(userModel.getEmail());
+//        newUser.setRole(userModel.getRole());
         newUser = userRepository.save(newUser);
         userRepository.flush();
         return new UserModel(newUser);
@@ -82,10 +87,12 @@ public class UserService {
             throw new UserNotFoundException(userId.toString());
         }
         user.setUsername(userModel.getUsername());
+        user.setFirstName(userModel.getFirstName());
+        user.setLastName(userModel.getLastName());
         if (!StringUtils.isNullOrEmpty(userModel.getPassword())) {
-            user.setPassword(userModel.getPassword());
+            user.setPassword(bCryptPasswordEncoder.encode(userModel.getPassword()));
         }
-        user.setRole(userModel.getRole());
+//        user.setRole(userModel.getRole());
         userRepository.save(user);
         userRepository.flush();
 

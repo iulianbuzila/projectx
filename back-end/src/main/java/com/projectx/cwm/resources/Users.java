@@ -28,7 +28,7 @@ public class Users {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
     ResponseEntity<?> edit(@RequestBody UserModel userModel, @PathVariable Long userId) {
 
@@ -41,24 +41,25 @@ public class Users {
         return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<?> getUsers() {
-        UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserLoginDetails loggedUser = null;
 
         logger.info("Getting all users.");
         Set<UserModel> userModels = userService.getUsers(loggedUser);
         logger.info("Successfully got all users.");
-        return new ResponseEntity<>(userModels, new HttpHeaders(), HttpStatus.CREATED);
+        return new ResponseEntity<>(userModels, HttpStatus.OK);
 
     }
 
-    // TODO: 11/3/16 configurat loggerul
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> add(@RequestBody UserModel userModel) {
 
-        UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserLoginDetails loggedUser = null;
 
         logger.info("Adding user '" + userModel + "'.");
         UserModel user = userService.add(userModel, loggedUser);
@@ -80,13 +81,13 @@ public class Users {
         return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'CONTRIBUTOR', 'READER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'CONTRIBUTOR', 'READER')")
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     UserModel readUser(@PathVariable Long userId) {
         return this.userService.getUser(userId);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'CONTRIBUTOR', 'READER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'CONTRIBUTOR', 'READER')")
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     ResponseEntity<?> forgotPassword(@RequestBody UserModel userModel) {
         logger.info("Forgot password '" + userModel.getEmail() + "'.");

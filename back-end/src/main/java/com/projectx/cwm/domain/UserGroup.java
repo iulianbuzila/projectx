@@ -1,5 +1,7 @@
 package com.projectx.cwm.domain;
 
+import com.projectx.cwm.services.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
@@ -10,15 +12,35 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class UserGroup extends AbstractPersistable<Long> {
+
     @ManyToOne(optional = false)
     User user;
 
     @ManyToOne(optional = false)
     Group group;
 
-    private String role;
+    @ManyToOne(optional = false)
+    Role role;
+
+    private String function;
+
+    public UserGroup(User user, Group group, Role role, String function) {
+        this.user = user;
+        this.group = group;
+        this.role = role;
+        this.function = function;
+    }
 
     public UserGroup() {
+    }
+
+    public Role getRole() {
+
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public User getUser() {
@@ -37,11 +59,11 @@ public class UserGroup extends AbstractPersistable<Long> {
         this.group = group;
     }
 
-    public String getRole() {
-        return role;
+    public String getFunction() {
+        return function;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setFunction(String function) {
+        this.function = function;
     }
 }

@@ -7,24 +7,57 @@ import com.projectx.cwm.domain.User;
  */
 public class UserModel {
     private Long id;
+
+    public UserModel(Long id, String username, String role, String password, String firstName, String lastName, String email) {
+        this.id = id;
+        this.username = username;
+        this.role = role;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
     private String username;
     private String role;
     private String password;
+    private String firstName;
+    private String lastName;
     private String email;
+
     public UserModel(String username, String password, String role, String email) {
         this.username = username;
         this.role = role;
         this.password = password;
         this.email = email;
     }
+
     public UserModel(User user) {
         id = user.getId();
         username = user.getUsername();
-        role = user.getRole();
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
+//        role = user.getRole();
         email = user.getEmail();
     }
 
     public UserModel() {
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Long getId() {
