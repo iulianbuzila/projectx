@@ -41,7 +41,7 @@ public class Users {
         return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<?> getUsers() {
 //        UserLoginDetails loggedUser = (UserLoginDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

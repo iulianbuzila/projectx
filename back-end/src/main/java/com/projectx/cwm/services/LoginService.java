@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -39,12 +40,13 @@ public class LoginService implements UserDetailsService {
 
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(s);
 
         Set<String> roles = user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet());
         List<GrantedAuthority> authorities = new ArrayList<>();
-
+        authorities.add(new SimpleGrantedAuthority("ADMIN"));
         if (roles != null) {
             for (String role : roles) {
                 GrantedAuthority authority = new SimpleGrantedAuthority(role);
