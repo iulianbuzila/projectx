@@ -18,10 +18,10 @@ import java.util.Set;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
-    @Query(value = "select role from cwm.role inner join cwm.user_group on cwm.role.id = cwm.user_group.role_id i" +
-            "nner join cwm.user on cwm.user.id = cwm.user_group.user_id where cwm.user.username = :username",
-            nativeQuery = true)
-    List<String> findRolesByUser(@Param("username")String username);
+//    @Query(value = "select role from cwm.role inner join cwm.user_group on cwm.role.id = cwm.user_group.role_id i" +
+//            "nner join cwm.user on cwm.user.id = cwm.user_group.user_id where cwm.user.username = :username",
+//            nativeQuery = true)
+//    List<String> findRolesByUser(@Param("username")String username);
 
     User findByUsernameAndPassword(String username, String password);
 
@@ -31,4 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "inner join cwm.group_ on cwm.user_group.group_id = cwm.group_.id where cwm.group_.id = :group",
             nativeQuery = true)
     List<User> findByGroup(@Param("group") Long id);
+
+    @Query(value = "SELECT cwm.role.role from cwm.role INNER JOIN cwm.user ON cwm.role.id = cwm.user.role_id WHERE " +
+            " cwm.user.username = :username", nativeQuery = true)
+    String findRoleByUser(@Param("username") String username);
 }

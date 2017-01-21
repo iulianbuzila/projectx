@@ -37,14 +37,12 @@ public class LoginService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(s);
 
-        List<String> roles = userRepository.findRolesByUser(s);
+        String role = userRepository.findRoleByUser(s);
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        if (roles != null) {
-            for (String role : roles) {
+//        authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        if (role != null) {
                 GrantedAuthority authority = new SimpleGrantedAuthority(role);
                 authorities.add(authority);
-            }
         }
         String username = "";
         String password = "";

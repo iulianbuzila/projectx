@@ -10,7 +10,6 @@ import java.util.List;
 public class GroupModel {
     private Long id;
     private String name;
-    private Long creatorId;
     private Long adminId;
     private List<UserModel> users;
 
@@ -21,14 +20,12 @@ public class GroupModel {
         id = group.getId();
         name = group.getName();
 
-        creatorId = group.getCreator().getId();
         adminId = group.getAdmin().getId();
     }
 
     public GroupModel(Group group, List<UserModel> users) {
         id = group.getId();
         name = group.getName();
-        creatorId = group.getCreator().getId();
         if (group.getAdmin() != null) {
             adminId = group.getAdmin().getId();
         }
@@ -38,7 +35,6 @@ public class GroupModel {
     public GroupModel(Long id, String name, Long creatorId, Long adminID, List<UserModel> users) {
         this.id = id;
         this.name = name;
-        this.creatorId = creatorId;
         this.adminId = adminID;
         this.users = users;
     }
@@ -57,14 +53,6 @@ public class GroupModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
     }
 
     public Long getAdminId() {
