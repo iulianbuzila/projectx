@@ -1,10 +1,7 @@
 package com.projectx.cwm.services;
 
-import com.projectx.cwm.domain.Role;
 import com.projectx.cwm.domain.User;
-import com.projectx.cwm.exceptions.UserNotFoundException;
 import com.projectx.cwm.models.UserLoginDetails;
-import com.projectx.cwm.models.UserModel;
 import com.projectx.cwm.repositories.UserRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by sl0 on 11/16/16.
@@ -29,22 +24,20 @@ import java.util.stream.Collectors;
 public class LoginService implements UserDetailsService {
     private final UserRepository userRepository;
     private final Logger logger = Logger.getLogger(LoginService.class);
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public LoginService(UserRepository userRepository) {
+    public LoginService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(s);
 
-        Set<String> roles = user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet());
+        List<String> roles = userRepository.findRolesByUser(s);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ADMIN"));
         if (roles != null) {
@@ -55,7 +48,7 @@ public class LoginService implements UserDetailsService {
         }
         String username = "";
         String password = "";
-        if (user != null){
+        if (user != null) {
             username = user.getUsername();
             password = user.getPassword();
         }

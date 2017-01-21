@@ -2,12 +2,14 @@ package com.projectx.cwm.services;
 
 import com.google.common.collect.Lists;
 import com.mysql.jdbc.StringUtils;
+import com.projectx.cwm.domain.Log;
 import com.projectx.cwm.domain.User;
 import com.projectx.cwm.exceptions.ResourceAlreadyExists;
 import com.projectx.cwm.exceptions.ResourceNotFound;
 import com.projectx.cwm.exceptions.UserNotFoundException;
 import com.projectx.cwm.models.UserLoginDetails;
 import com.projectx.cwm.models.UserModel;
+import com.projectx.cwm.repositories.LogRepository;
 import com.projectx.cwm.repositories.UserRepository;
 import it.ozimov.springboot.templating.mail.model.Email;
 import it.ozimov.springboot.templating.mail.model.impl.EmailImpl;
@@ -29,18 +31,22 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserService {
-    private final UserRepository userRepository;
     private final Logger logger = Logger.getLogger(UserService.class);
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final EmailService emailService;
+
+    private final LogRepository logRepository;
 
     @Autowired
-    public EmailService emailService;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, EmailService emailService, LogRepository logRepository) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.emailService = emailService;
+        this.logRepository = logRepository;
     }
 
 
@@ -57,27 +63,37 @@ public class UserService {
 //        newUser.setRole(userModel.getRole());
         newUser = userRepository.save(newUser);
         userRepository.flush();
-        return new UserModel(newUser);
+        logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " added user " +
+                newUser.getUsername() + ".", userRepository.findByUsername(loggedUser.getUsername())));
+        return new UserModel(newUser, userRepository.findRolesByUser(newUser.getUsername()));
     }
 
     public boolean delete(Long userId, UserLoginDetails loggedUser){
         User user = userRepository.findOne(userId);
+
         if (user == null){
             logger.error("User " + userId.toString() + " not found!");
             throw new ResourceNotFound("user " + userId.toString());
         }
+
         userRepository.delete(user);
         userRepository.flush();
+
+        logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " deleted user " +
+                user.getUsername() + ".", userRepository.findByUsername(loggedUser.getUsername())));
         return true;
     }
 
-    public UserModel getUser(Long userId) {
+    public UserModel getUser(Long userId, UserLoginDetails loggedUser) {
         User user = userRepository.findOne(userId);
         if (user == null){
             logger.error("User " + userId.toString() + " not found!");
             throw new UserNotFoundException(userId.toString());
         }
-        return new UserModel(user);
+
+        logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " got user " +
+                user.getUsername() + ".", userRepository.findByUsername(loggedUser.getUsername())));
+        return new UserModel(user, userRepository.findRolesByUser(user.getUsername()));
     }
 
     public UserModel edit(UserModel userModel, Long userId, UserLoginDetails loggedUser){
@@ -86,25 +102,33 @@ public class UserService {
             logger.error("User " + userId.toString() + " not found!");
             throw new UserNotFoundException(userId.toString());
         }
+
         user.setUsername(userModel.getUsername());
         user.setFirstName(userModel.getFirstName());
         user.setLastName(userModel.getLastName());
         if (!StringUtils.isNullOrEmpty(userModel.getPassword())) {
             user.setPassword(bCryptPasswordEncoder.encode(userModel.getPassword()));
         }
+
 //        user.setRole(userModel.getRole());
         userRepository.save(user);
         userRepository.flush();
 
-        return new UserModel(user);
+        logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " edited user " +
+                user.getUsername() + ".", userRepository.findByUsername(loggedUser.getUsername())));
+
+        return new UserModel(user, userRepository.findRolesByUser(user.getUsername()));
     }
 
     public Set<UserModel> getUsers(UserLoginDetails loggedUser) {
+        logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " got all users " + ".",
+                userRepository.findByUsername(loggedUser.getUsername())));
         return userRepository.findAll().stream().map(UserModel::new).collect(Collectors.toSet());
     }
 
     public UserModel forgotPassword(String email) {
         User user = userRepository.findByEmail(email);
+
         if (user == null){
             logger.error("User with " + email + " not found!");
             throw new UserNotFoundException(email);
@@ -115,13 +139,14 @@ public class UserService {
 
         userRepository.save(user);
         userRepository.flush();
-
+        logRepository.save(new Log(null, "User " + user.getUsername() + " got all users " + ".",
+                user));
         try {
             sendEmail(user);
         } catch (AddressException e) {
             e.printStackTrace();
         }
-        return new UserModel(user);
+        return new UserModel(user, userRepository.findRolesByUser(user.getUsername()));
     }
 
     public void sendEmail(User user) throws AddressException {

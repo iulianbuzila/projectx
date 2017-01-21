@@ -4,7 +4,6 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,14 +16,25 @@ public class User extends AbstractPersistable<Long> {
     private String password;
     private String email;
     private String firstName;
-//    private List<GrantedAuthority> authorities;
+    //    private List<GrantedAuthority> authorities;
     private String lastName;
     @OneToMany(mappedBy = "user")
-    private Set<Role> roles;
-//    @OneToMany(mappedBy = "user")
-//    private Set<UserGroup> userGroup;
+    private Set<Workflow> workflows;
+    @OneToMany(mappedBy = "user")
+    private Set<Log> logs;
+    @OneToMany(mappedBy = "creator")
+    private Set<Group> createdGroups;
+    @OneToMany(mappedBy = "admin")
+    private Set<Group> adminGroups;
 
-
+    public User(String username, String password, String email, String firstName, String lastName, Set<Log> logs) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.logs = logs;
+    }
     public User(String username, String password, String email, String firstName, String lastName/*, Set<UserGroup> userGroup*/) {
 
         this.username = username;
@@ -36,6 +46,32 @@ public class User extends AbstractPersistable<Long> {
     }
 
     public User() {
+    }
+
+    public Set<Workflow> getWorkflows() {
+        return workflows;
+    }
+
+    public void setWorkflows(Set<Workflow> workflows) {
+        this.workflows = workflows;
+    }
+
+    public Set<Group> getCreatedGroups() {
+        return createdGroups;
+    }
+
+    public void setCreatedGroups(Set<Group> createdGroups) {
+        this.createdGroups = createdGroups;
+    }
+//    @OneToMany(mappedBy = "user")
+//    private Set<UserGroup> userGroup;
+
+    public Set<Group> getAdminGroups() {
+        return adminGroups;
+    }
+
+    public void setAdminGroups(Set<Group> adminGroups) {
+        this.adminGroups = adminGroups;
     }
 
     public String getFirstName() {
@@ -93,11 +129,11 @@ public class User extends AbstractPersistable<Long> {
         this.email = email;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<Log> getLogs() {
+        return logs;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setLogs(Set<Log> logs) {
+        this.logs = logs;
     }
 }

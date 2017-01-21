@@ -12,13 +12,13 @@ import java.util.Set;
  */
 @Entity
 public class Role extends AbstractPersistable<Long> {
-    String role;
+    private String role;
 
     @ManyToOne(optional = false)
-    User user;
+    private User user;
 
     @OneToMany(mappedBy = "role")
-    Set<UserGroup> userGroup;
+    private Set<UserGroup> userGroup;
 
     public Role(String role, User user, Set<UserGroup> userGroup) {
         this.role = role;

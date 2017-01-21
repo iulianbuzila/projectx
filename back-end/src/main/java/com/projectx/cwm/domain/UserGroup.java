@@ -1,7 +1,5 @@
 package com.projectx.cwm.domain;
 
-import com.projectx.cwm.services.UserService;
-import org.apache.log4j.Logger;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
@@ -14,13 +12,13 @@ import javax.persistence.ManyToOne;
 public class UserGroup extends AbstractPersistable<Long> {
 
     @ManyToOne(optional = false)
-    User user;
+    private User user;
 
     @ManyToOne(optional = false)
-    Group group;
+    private Group group;
 
-    @ManyToOne(optional = false)
-    Role role;
+    @ManyToOne(optional = true)
+    private  Role role;
 
     private String function;
 

@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>cwm</name>
-	<description>Content workflow management</description>
+	<description>Content workflows management</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

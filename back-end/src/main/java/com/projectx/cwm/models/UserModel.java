@@ -2,34 +2,44 @@ package com.projectx.cwm.models;
 
 import com.projectx.cwm.domain.User;
 
+import java.util.List;
+
 /**
  * Created by sl0 on 11/16/16.
  */
 public class UserModel {
     private Long id;
+    private String username;
+    private List<String> roles;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String email;
 
-    public UserModel(Long id, String username, String role, String password, String firstName, String lastName, String email) {
+    private String roleInGroup;
+
+    public UserModel(Long id, String username, String password, String firstName, String lastName, String email) {
         this.id = id;
         this.username = username;
-        this.role = role;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    private String username;
-    private String role;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String email;
-
-    public UserModel(String username, String password, String role, String email) {
+    public UserModel(String username, String password, String email) {
         this.username = username;
-        this.role = role;
         this.password = password;
         this.email = email;
+    }
+
+    public UserModel(User user, List<String> roles) {
+        id = user.getId();
+        username = user.getUsername();
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
+        roles = roles;
+        email = user.getEmail();
     }
 
     public UserModel(User user) {
@@ -37,7 +47,6 @@ public class UserModel {
         username = user.getUsername();
         firstName = user.getFirstName();
         lastName = user.getLastName();
-//        role = user.getRole();
         email = user.getEmail();
     }
 
@@ -84,19 +93,18 @@ public class UserModel {
         this.username = username;
     }
 
-    public String getRole() {
-        return role;
+    public List<String> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(List<String> role) {
+        this.roles = role;
     }
 
     @Override
     public String toString() {
         return "UserModel{" +
                 "username='" + username + '\'' +
-                ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
@@ -107,5 +115,13 @@ public class UserModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRoleInGroup() {
+        return roleInGroup;
+    }
+
+    public void setRoleInGroup(String roleInGroup) {
+        this.roleInGroup = roleInGroup;
     }
 }
