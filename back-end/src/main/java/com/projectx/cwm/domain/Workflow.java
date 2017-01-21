@@ -16,11 +16,12 @@ public class Workflow extends AbstractPersistable<Long> {
     LocalDateTime dateOfCreation;
     @OneToMany(mappedBy = "workflow")
     Set<Log> logs;
+    @OneToMany(mappedBy = "workflow")
+    Set<Document> documents;
     private String name;
     private String fundingType;
     @ManyToOne()
     private User user;
-
     public Workflow(LocalDateTime dateOfCreation, String name, String fundingType, User user, Set<Log> logs) {
         this.dateOfCreation = dateOfCreation;
         this.name = name;
@@ -28,7 +29,6 @@ public class Workflow extends AbstractPersistable<Long> {
         this.user = user;
         this.logs = logs;
     }
-
     public Workflow() {
 
     }
@@ -46,6 +46,14 @@ public class Workflow extends AbstractPersistable<Long> {
         this.fundingType = fundingType;
         this.user = user;
         this.dateOfCreation = dateOfCreation;
+    }
+
+    public Set<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
     }
 
     public Set<Log> getLogs() {
