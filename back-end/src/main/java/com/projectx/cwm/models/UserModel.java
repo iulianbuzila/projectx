@@ -10,7 +10,7 @@ import java.util.List;
 public class UserModel {
     private Long id;
     private String username;
-    private List<String> roles;
+    private String role;
     private String password;
     private String firstName;
     private String lastName;
@@ -32,12 +32,12 @@ public class UserModel {
         this.email = email;
     }
 
-    public UserModel(User user, List<String> roles) {
+    public UserModel(User user, String role) {
         id = user.getId();
         username = user.getUsername();
         firstName = user.getFirstName();
         lastName = user.getLastName();
-        roles = roles;
+        this.role = role;
         email = user.getEmail();
     }
 
@@ -92,12 +92,12 @@ public class UserModel {
         this.username = username;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(List<String> role) {
-        this.roles = role;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

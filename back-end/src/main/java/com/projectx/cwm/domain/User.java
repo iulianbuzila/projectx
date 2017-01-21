@@ -3,6 +3,7 @@ package com.projectx.cwm.domain;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
@@ -18,6 +19,8 @@ public class User extends AbstractPersistable<Long> {
     private String firstName;
     //    private List<GrantedAuthority> authorities;
     private String lastName;
+    @ManyToOne()
+    private Role role;
     @OneToMany(mappedBy = "user")
     private Set<Workflow> workflows;
     @OneToMany(mappedBy = "user")
@@ -26,7 +29,6 @@ public class User extends AbstractPersistable<Long> {
     private Set<Group> createdGroups;
     @OneToMany(mappedBy = "admin")
     private Set<Group> adminGroups;
-
     public User(String username, String password, String email, String firstName, String lastName, Set<Log> logs) {
         this.username = username;
         this.password = password;
@@ -46,6 +48,14 @@ public class User extends AbstractPersistable<Long> {
     }
 
     public User() {
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Set<Workflow> getWorkflows() {

@@ -31,7 +31,10 @@ public class Users {
     }
 
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
     ResponseEntity<?> edit(@RequestBody UserModel userModel, @PathVariable Long userId) {
 
@@ -44,13 +47,11 @@ public class Users {
         return new ResponseEntity<>(userModel, new HttpHeaders(), HttpStatus.OK);
     }
 
-
-
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<?> getUsers() {
-        UserLoginDetails loggedUser = Utils.getUserDetails();
-//        UserLoginDetails loggedUser = null;
+//        UserLoginDetails loggedUser = Utils.getUserDetails();
+        UserLoginDetails loggedUser = null;
 
         logger.info("Getting all users.");
         Set<UserModel> userModels = userService.getUsers(loggedUser);
@@ -59,11 +60,11 @@ public class Users {
 
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> add(@RequestBody UserModel userModel) {
-        UserLoginDetails loggedUser = Utils.getUserDetails();
-//        UserLoginDetails loggedUser = null;
+//        UserLoginDetails loggedUser = Utils.getUserDetails();
+        UserLoginDetails loggedUser = null;
 
         logger.info("Adding user '" + userModel + "'.");
         UserModel user = userService.add(userModel, loggedUser);

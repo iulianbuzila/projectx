@@ -14,12 +14,12 @@ import java.util.Set;
 public class Role extends AbstractPersistable<Long> {
     private String role;
 
-    @ManyToOne(optional = false)
-    private User user;
+    @OneToMany(mappedBy = "role")
+    private Set<User> users;
 
-    public Role(String role, User user) {
+    public Role(String role, Set<User> user) {
         this.role = role;
-        this.user = user;
+        this.users = user;
     }
 
     public Role() {
@@ -30,12 +30,12 @@ public class Role extends AbstractPersistable<Long> {
         this.role = role;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(Set<User> user) {
+        this.users = user;
     }
 
     public String getRole() {

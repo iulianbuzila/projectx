@@ -10,6 +10,7 @@ import com.projectx.cwm.exceptions.UserNotFoundException;
 import com.projectx.cwm.models.UserLoginDetails;
 import com.projectx.cwm.models.UserModel;
 import com.projectx.cwm.repositories.LogRepository;
+import com.projectx.cwm.repositories.RoleRepository;
 import com.projectx.cwm.repositories.UserRepository;
 import it.ozimov.springboot.templating.mail.model.Email;
 import it.ozimov.springboot.templating.mail.model.impl.EmailImpl;
@@ -41,12 +42,15 @@ public class UserService {
 
     private final LogRepository logRepository;
 
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, EmailService emailService, LogRepository logRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, EmailService emailService, LogRepository logRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.emailService = emailService;
         this.logRepository = logRepository;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -60,12 +64,12 @@ public class UserService {
         newUser.setUsername(userModel.getUsername());
         newUser.setPassword(bCryptPasswordEncoder.encode(userModel.getPassword()));
         newUser.setEmail(userModel.getEmail());
-//        newUser.setRole(userModel.getRole());
+        newUser.setRole(roleRepository.findByRole(userModel.getRole()));
         newUser = userRepository.save(newUser);
         userRepository.flush();
         logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " added user " +
                 newUser.getUsername() + ".", userRepository.findByUsername(loggedUser.getUsername())));
-        return new UserModel(newUser, userRepository.findRolesByUser(newUser.getUsername()));
+        return new UserModel(newUser, userRepository.findRoleByUser(newUser.getUsername()));
     }
 
     public boolean delete(Long userId, UserLoginDetails loggedUser){
@@ -93,7 +97,7 @@ public class UserService {
 
         logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " got user " +
                 user.getUsername() + ".", userRepository.findByUsername(loggedUser.getUsername())));
-        return new UserModel(user, userRepository.findRolesByUser(user.getUsername()));
+        return new UserModel(user, userRepository.findRoleByUser(user.getUsername()));
     }
 
     public UserModel edit(UserModel userModel, Long userId, UserLoginDetails loggedUser){
@@ -117,7 +121,7 @@ public class UserService {
         logRepository.save(new Log(null, "User " + loggedUser.getUsername() + " edited user " +
                 user.getUsername() + ".", userRepository.findByUsername(loggedUser.getUsername())));
 
-        return new UserModel(user, userRepository.findRolesByUser(user.getUsername()));
+        return new UserModel(user, userRepository.findRoleByUser(user.getUsername()));
     }
 
     public Set<UserModel> getUsers(UserLoginDetails loggedUser) {
@@ -134,7 +138,8 @@ public class UserService {
             throw new UserNotFoundException(email);
         }
 
-        String newPassword = RandomStringUtils.randomAlphanumeric(8);
+        String uncryptedPassword = RandomStringUtils.randomAlphanumeric(8);
+        String newPassword = bCryptPasswordEncoder.encode(uncryptedPassword);
         user.setPassword(newPassword);
 
         userRepository.save(user);
@@ -142,19 +147,19 @@ public class UserService {
         logRepository.save(new Log(null, "User " + user.getUsername() + " got all users " + ".",
                 user));
         try {
-            sendEmail(user);
+            sendEmail(user, uncryptedPassword);
         } catch (AddressException e) {
             e.printStackTrace();
         }
-        return new UserModel(user, userRepository.findRolesByUser(user.getUsername()));
+        return new UserModel(user, userRepository.findRoleByUser(user.getUsername()));
     }
 
-    public void sendEmail(User user) throws AddressException {
+    public void sendEmail(User user, String uncryptedPassword) throws AddressException {
         final Email email = EmailImpl.builder()
                 .from(new InternetAddress("support@projectx.com"))
                 .to(Lists.newArrayList(new InternetAddress(user.getEmail())))
                 .subject("Reset Password")
-                .body("You forgot password. This is your new password: " + user.getPassword())
+                .body("You forgot password. This is your new password: " + uncryptedPassword)
                 .encoding(Charset.forName("UTF-8")).build();
 
         emailService.send(email);
