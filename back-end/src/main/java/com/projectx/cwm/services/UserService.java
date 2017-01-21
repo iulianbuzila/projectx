@@ -134,7 +134,8 @@ public class UserService {
             throw new UserNotFoundException(email);
         }
 
-        String newPassword = RandomStringUtils.randomAlphanumeric(8);
+        String uncryptedPassword = RandomStringUtils.randomAlphanumeric(8);
+        String newPassword = bCryptPasswordEncoder.encode(uncryptedPassword);
         user.setPassword(newPassword);
 
         userRepository.save(user);
@@ -142,19 +143,19 @@ public class UserService {
         logRepository.save(new Log(null, "User " + user.getUsername() + " got all users " + ".",
                 user));
         try {
-            sendEmail(user);
+            sendEmail(user, uncryptedPassword);
         } catch (AddressException e) {
             e.printStackTrace();
         }
         return new UserModel(user, userRepository.findRolesByUser(user.getUsername()));
     }
 
-    public void sendEmail(User user) throws AddressException {
+    public void sendEmail(User user, String uncryptedPassword) throws AddressException {
         final Email email = EmailImpl.builder()
                 .from(new InternetAddress("support@projectx.com"))
                 .to(Lists.newArrayList(new InternetAddress(user.getEmail())))
                 .subject("Reset Password")
-                .body("You forgot password. This is your new password: " + user.getPassword())
+                .body("You forgot password. This is your new password: " + uncryptedPassword)
                 .encoding(Charset.forName("UTF-8")).build();
 
         emailService.send(email);
