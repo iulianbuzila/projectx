@@ -5,6 +5,8 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 /**
  * Created by sl0 on 11/22/16.
@@ -21,6 +23,9 @@ public class Group extends AbstractPersistable<Long> {
     @ManyToOne()
     private User admin;
 
+    @OneToMany(mappedBy = "user")
+    private Set<UserGroup> users;
+
     public Group(String name, User creator, User admin) {
         this.name = name;
         this.creator = creator;
@@ -28,6 +33,14 @@ public class Group extends AbstractPersistable<Long> {
     }
 
     public Group() {
+    }
+
+    public Set<UserGroup> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserGroup> users) {
+        this.users = users;
     }
 
     public User getCreator() {

@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -33,22 +30,25 @@ public class Documents {
 
     @PreAuthorize("hasAnyAuthority('ADMIN,MANAGER,CONTRIBUTOR,USER')")
     @RequestMapping(method = RequestMethod.POST, headers = "content-type=multipart/*")
-    public ResponseEntity<?> upload(MultipartHttpServletRequest request,
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartHttpServletRequest request,
                                     @RequestParam("name") String name,
                                     @RequestParam("keyword") String keyword,
-                                    @RequestParam("abstract") String abstract_){
+                                    @RequestParam("abstract") String abstract_) {
         UserLoginDetails loggedUser = Utils.getUserDetails();
         Map<String, MultipartFile> map = request.getFileMap();
         for (Map.Entry<String, MultipartFile> entry : map.entrySet()) {
-            try {
-                documentService.saveDocument(entry.getValue(), name, keyword, abstract_, loggedUser);
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            documentService.saveDocument(entry.getValue(), name, keyword, abstract_, loggedUser);
         }
         return new ResponseEntity<>(new Response(true), HttpStatus.CREATED);
 
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN,MANAGER,CONTRIBUTOR,USER')")
+    @RequestMapping(value = "/{documentId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable("documentId") Long documentId) {
+        UserLoginDetails loggedUser = Utils.getUserDetails();
+        documentService.deleteDocument(documentId, loggedUser);
+        return new ResponseEntity<>(new Response(true), HttpStatus.CREATED);
+    }
+
 }

@@ -3,6 +3,8 @@ package com.projectx.cwm.services;
 import com.projectx.cwm.domain.Document;
 import com.projectx.cwm.domain.User;
 import com.projectx.cwm.exceptions.ResourceAlreadyExists;
+import com.projectx.cwm.exceptions.ResourceNotFound;
+import com.projectx.cwm.exceptions.UserNotAllowed;
 import com.projectx.cwm.models.UserLoginDetails;
 import com.projectx.cwm.repositories.DocumentRepository;
 import com.projectx.cwm.repositories.LogRepository;
@@ -68,5 +70,23 @@ public class DocumentService {
             e.printStackTrace();
         }
         return path;
+    }
+
+    public void deleteDocument(Long documentId, UserLoginDetails loggedUser) {
+        Document document = documentRepository.findOne(documentId);
+        if (document == null){
+            throw new ResourceNotFound("Document not found!");
+        }
+
+        User user = userRepository.findByUsername(loggedUser.getUsername());
+        if (!user.getCreatedDocuments().contains(document)){
+            throw new UserNotAllowed("User not allowed to delete document.");
+        }
+
+        File docFile = new File(document.getPath());
+        boolean succ = docFile.delete();
+
+        documentRepository.delete(document);
+        documentRepository.flush();
     }
 }

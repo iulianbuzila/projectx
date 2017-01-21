@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class GroupService {
     private final String OWNER = "OWNER";
     private final String ADMIN = "ADMIN";
+    private final String USER = "USER";
 
     final UserGroupRepository userGroupRepository;
     final GroupRepository groupRepository;
@@ -57,7 +58,20 @@ public class GroupService {
 
         groupRepository.save(group);
         groupRepository.flush();
-
+        
+        if (groupModel.getUsers() != null){
+            for (UserModel userModel :
+                    groupModel.getUsers()) {
+                User groupUser = userRepository.findOne(userModel.getId());
+                if (groupUser == null){
+                    throw new ResourceNotFound("user " + userModel.getId());
+                }
+                UserGroup ug = new UserGroup();
+                ug.setUser(groupUser);
+                ug.setGroup(group);
+                userGroupRepository.save(ug);
+            }
+        }
 
         UserGroup userGroup = new UserGroup();
         userGroup.setFunction(OWNER);

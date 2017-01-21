@@ -19,7 +19,6 @@ public class GroupModel {
     public GroupModel(Group group) {
         id = group.getId();
         name = group.getName();
-
         adminId = group.getAdmin().getId();
     }
 

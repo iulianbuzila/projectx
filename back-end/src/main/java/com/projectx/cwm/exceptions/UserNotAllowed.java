@@ -11,4 +11,8 @@ public class UserNotAllowed extends RuntimeException {
     public UserNotAllowed(Long userId, Long groupId) {
         super("User '" + userId + "' not allowed to edit group '" + groupId + "'.");
     }
+
+    public UserNotAllowed(String s) {
+        super(s);
+    }
 }
