@@ -3,6 +3,7 @@ package com.projectx.cwm.services;
 import com.projectx.cwm.domain.*;
 import com.projectx.cwm.exceptions.ResourceAlreadyExists;
 import com.projectx.cwm.exceptions.ResourceNotFound;
+import com.projectx.cwm.exceptions.UserNotAllowed;
 import com.projectx.cwm.models.GroupModel;
 import com.projectx.cwm.models.UserLoginDetails;
 import com.projectx.cwm.models.UserModel;
@@ -140,13 +141,21 @@ public class GroupService {
         if (group == null){
             throw new ResourceNotFound("Group " + groupId + " not found.");
         }
-        group.setName(groupModel.getName());
-        if (groupModel.getAdminId() != null) {
-            User admin = userRepository.findOne(groupModel.getAdminId());
-            group.setAdmin(admin);
+
+        User user = userRepository.findByUsername(loggedUser.getUsername());
+        UserGroup userGroup = userGroupRepository.findByUserAndGroup(user, group);
+
+        if(userGroup.getFunction().toLowerCase().equals(OWNER.toLowerCase())) {
+            group.setName(groupModel.getName());
+            if (groupModel.getAdminId() != null) {
+                User admin = userRepository.findOne(groupModel.getAdminId());
+                group.setAdmin(admin);
+            }
+            groupRepository.save(group);
+            groupRepository.flush();
+        } else {
+            throw  new UserNotAllowed(userGroup.getUser().getId(), groupId);
         }
-        groupRepository.save(group);
-        groupRepository.flush();
     }
 
     public void removeUserFromGroup(Long groupId, Long userId, UserLoginDetails loggedUser) {

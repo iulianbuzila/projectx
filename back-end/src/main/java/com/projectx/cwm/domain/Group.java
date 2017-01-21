@@ -17,11 +17,11 @@ public class Group extends AbstractPersistable<Long> {
 
     @ManyToOne(optional = false)
     private User creator;
+
     @ManyToOne()
     private User admin;
 
     public Group(String name, User creator, User admin) {
-
         this.name = name;
         this.creator = creator;
         this.admin = admin;

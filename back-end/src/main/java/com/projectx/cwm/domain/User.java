@@ -19,32 +19,41 @@ public class User extends AbstractPersistable<Long> {
     private String firstName;
     //    private List<GrantedAuthority> authorities;
     private String lastName;
+
     @ManyToOne()
     private Role role;
+
     @OneToMany(mappedBy = "user")
     private Set<Workflow> workflows;
+
     @OneToMany(mappedBy = "user")
     private Set<Log> logs;
+
     @OneToMany(mappedBy = "creator")
     private Set<Group> createdGroups;
+
     @OneToMany(mappedBy = "admin")
     private Set<Group> adminGroups;
-    public User(String username, String password, String email, String firstName, String lastName, Set<Log> logs) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.logs = logs;
-    }
-    public User(String username, String password, String email, String firstName, String lastName/*, Set<UserGroup> userGroup*/) {
 
+    @OneToMany(mappedBy = "user")
+    private Set<UserGroup> userGroup;
+
+//    public User(String username, String password, String email, String firstName, String lastName, Set<Log> logs) {
+//        this.username = username;
+//        this.password = password;
+//        this.email = email;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.logs = logs;
+//    }
+
+    public User(String username, String password, String email, String firstName, String lastName, Set<UserGroup> userGroup) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-//        this.userGroup = userGroup;
+        this.userGroup = userGroup;
     }
 
     public User() {
@@ -73,8 +82,6 @@ public class User extends AbstractPersistable<Long> {
     public void setCreatedGroups(Set<Group> createdGroups) {
         this.createdGroups = createdGroups;
     }
-//    @OneToMany(mappedBy = "user")
-//    private Set<UserGroup> userGroup;
 
     public Set<Group> getAdminGroups() {
         return adminGroups;
@@ -107,13 +114,13 @@ public class User extends AbstractPersistable<Long> {
                 '}';
     }
 
-//    public Set<UserGroup> getUserGroup() {
-//        return userGroup;
-//    }
+    public Set<UserGroup> getUserGroup() {
+        return userGroup;
+    }
 
-//    public void setUserGroup(Set<UserGroup> userGroup) {
-//        this.userGroup = userGroup;
-//    }
+    public void setUserGroup(Set<UserGroup> userGroup) {
+        this.userGroup = userGroup;
+    }
 
     public String getUsername() {
         return username;
