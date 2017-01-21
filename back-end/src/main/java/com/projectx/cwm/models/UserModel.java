@@ -15,7 +15,6 @@ public class UserModel {
     private String firstName;
     private String lastName;
     private String email;
-
     private String roleInGroup;
 
     public UserModel(Long id, String username, String password, String firstName, String lastName, String email) {

@@ -17,28 +17,15 @@ public class UserGroup extends AbstractPersistable<Long> {
     @ManyToOne(optional = false)
     private Group group;
 
-    @ManyToOne(optional = true)
-    private  Role role;
-
     private String function;
 
-    public UserGroup(User user, Group group, Role role, String function) {
+    public UserGroup(User user, Group group, String function) {
         this.user = user;
         this.group = group;
-        this.role = role;
         this.function = function;
     }
 
     public UserGroup() {
-    }
-
-    public Role getRole() {
-
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public User getUser() {

@@ -31,9 +31,6 @@ public class Users {
     }
 
 
-    
-
-
 //    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
     ResponseEntity<?> edit(@RequestBody UserModel userModel, @PathVariable Long userId) {

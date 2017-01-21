@@ -17,15 +17,6 @@ public class Role extends AbstractPersistable<Long> {
     @ManyToOne(optional = false)
     private User user;
 
-    @OneToMany(mappedBy = "role")
-    private Set<UserGroup> userGroup;
-
-    public Role(String role, User user, Set<UserGroup> userGroup) {
-        this.role = role;
-        this.user = user;
-        this.userGroup = userGroup;
-    }
-
     public Role(String role, User user) {
         this.role = role;
         this.user = user;
@@ -37,15 +28,6 @@ public class Role extends AbstractPersistable<Long> {
     public Role(String role) {
 
         this.role = role;
-    }
-
-    public Set<UserGroup> getUserGroup() {
-
-        return userGroup;
-    }
-
-    public void setUserGroup(Set<UserGroup> userGroup) {
-        this.userGroup = userGroup;
     }
 
     public User getUser() {

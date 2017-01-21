@@ -1,9 +1,6 @@
 package com.projectx.cwm.services;
 
-import com.projectx.cwm.domain.Group;
-import com.projectx.cwm.domain.Log;
-import com.projectx.cwm.domain.User;
-import com.projectx.cwm.domain.UserGroup;
+import com.projectx.cwm.domain.*;
 import com.projectx.cwm.exceptions.ResourceAlreadyExists;
 import com.projectx.cwm.exceptions.ResourceNotFound;
 import com.projectx.cwm.models.GroupModel;
@@ -26,6 +23,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class GroupService {
+    private final String OWNER = "OWNER";
+    private final String ADMIN = "ADMIN";
+
     final UserGroupRepository userGroupRepository;
     final GroupRepository groupRepository;
     final UserRepository userRepository;
@@ -56,6 +56,16 @@ public class GroupService {
 
         groupRepository.save(group);
         groupRepository.flush();
+
+
+        UserGroup userGroup = new UserGroup();
+        userGroup.setFunction(OWNER);
+        userGroup.setUser(creator);
+        userGroup.setGroup(group);
+
+        userGroupRepository.save(userGroup);
+        userGroupRepository.flush();
+
         logger.info("Created group with name " + groupModel.getName() + ".");
         logRepository.save(new Log("User " + loggedUser.getUsername() + " created group " + group.getName(),
                 creator));
@@ -97,20 +107,32 @@ public class GroupService {
             throw new ResourceNotFound("Group " + groupId + " not found.");
         }
 
-        logRepository.save(new Log("User " + loggedUser.getUsername() + " added " + user.getUsername() + " to" +
-                " group " + group.getName() + ".",
-                userRepository.findByUsername(loggedUser.getUsername())));
+        UserGroup userGroup = userGroupRepository.findByUserAndGroup(user, group);
+        if(userGroup != null) {
+            throw new ResourceAlreadyExists("UserGroup for user " + user.getId()
+                    + " and group " + group.getId() + " already exists.");
+        }
+
+        UserGroup adminUserGroup = userGroupRepository.findByUserAndGroup(userRepository.findByUsername(loggedUser.getUsername()), group);
+
+        if(adminUserGroup.getFunction().toLowerCase().equals(OWNER.toLowerCase()) ||
+                adminUserGroup.getFunction().toLowerCase().equals(ADMIN.toLowerCase())){
+            UserGroup userGroup2 = new UserGroup();
+            userGroup2.setFunction(userModel.getRoleInGroup());
+            userGroup2.setGroup(group);
+            userGroup2.setUser(user);
+            userGroupRepository.save(userGroup2);
+            userGroupRepository.flush();
+
+            logRepository.save(new Log("User " + loggedUser.getUsername() + " added " + user.getUsername() + " to" +
+                    " group " + group.getName() + ".",
+                    userRepository.findByUsername(loggedUser.getUsername())));
+        }
 
         if (userModel.getRoleInGroup() == null) {
             throw new RuntimeException("Role in group not specified!");
         }
 
-        UserGroup userGroup = new UserGroup();
-        userGroup.setFunction(userModel.getRoleInGroup());
-        userGroup.setGroup(group);
-        userGroup.setUser(user);
-        userGroupRepository.save(userGroup);
-        userGroupRepository.flush();
     }
 
     public void editGroup(Long groupId, GroupModel groupModel, UserLoginDetails loggedUser) {
@@ -137,10 +159,22 @@ public class GroupService {
         if (group == null) {
             throw new ResourceNotFound("Group " + groupId + " not found.");
         }
-        logRepository.save(new Log("User " + loggedUser.getUsername() + " removed " + user.getUsername() + " from" +
-                " group " + group.getName() + ".", userRepository.findByUsername(loggedUser.getUsername())));
-        UserGroup ug = userGroupRepository.findByUserAndGroup(user, group);
-        userGroupRepository.delete(ug);
+
+        UserGroup userGroup = userGroupRepository.findByUserAndGroup(user, group);
+
+        if(userGroup == null){
+            throw new ResourceNotFound("UserGroup for user " + user.getId()
+                    + " and group " + group.getId() + ".");
+        }
+
+        UserGroup adminUserGroup = userGroupRepository.findByUserAndGroup(userRepository.findByUsername(loggedUser.getUsername()), group);
+        if(adminUserGroup.getFunction().toLowerCase().equals(OWNER.toLowerCase())){
+            logRepository.save(new Log("User " + loggedUser.getUsername() + " removed " + user.getUsername() + " from" +
+                    " group " + group.getName() + ".", userRepository.findByUsername(loggedUser.getUsername())));
+            userGroupRepository.delete(userGroup);
+            userGroupRepository.flush();
+        }
+
     }
 
     public GroupModel getGroup(Long groupId, UserLoginDetails loggedUser) {
