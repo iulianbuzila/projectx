@@ -65,9 +65,17 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
         // console.log(vm.user);
     }
 
+    function userGroups() {
+        UserService.userGroups(vm.user.id).success(function(result) {
+            // vm.list = result;
+            console.log(result);
+        })
+    }
+
     function reload() {
         UserService.list().success(function(result) {
             vm.list = result;
+            userGroups(user.id);
             console.log(result);
         })
     }
