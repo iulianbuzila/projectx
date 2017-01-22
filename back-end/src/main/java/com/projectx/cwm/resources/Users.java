@@ -87,7 +87,7 @@ public class Users {
         return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'CONTRIBUTOR', 'READER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'CONTRIBUTOR', 'USER')")
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     ResponseEntity<?> readUser(@PathVariable Long userId) {
         logger.info("Getting user '" + userId + "'.");

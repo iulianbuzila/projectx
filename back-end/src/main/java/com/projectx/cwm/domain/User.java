@@ -30,6 +30,9 @@ public class User extends AbstractPersistable<Long> {
     private Set<Log> logs;
 
     @OneToMany(mappedBy = "creator")
+    private Set<Document> createdDocuments;
+
+    @OneToMany(mappedBy = "creator")
     private Set<Group> createdGroups;
 
     @OneToMany(mappedBy = "admin")
@@ -37,15 +40,6 @@ public class User extends AbstractPersistable<Long> {
 
     @OneToMany(mappedBy = "user")
     private Set<UserGroup> userGroup;
-
-//    public User(String username, String password, String email, String firstName, String lastName, Set<Log> logs) {
-//        this.username = username;
-//        this.password = password;
-//        this.email = email;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.logs = logs;
-//    }
 
     public User(String username, String password, String email, String firstName, String lastName, Set<UserGroup> userGroup) {
         this.username = username;
@@ -57,6 +51,23 @@ public class User extends AbstractPersistable<Long> {
     }
 
     public User() {
+    }
+
+//    public User(String username, String password, String email, String firstName, String lastName, Set<Log> logs) {
+//        this.username = username;
+//        this.password = password;
+//        this.email = email;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.logs = logs;
+//    }
+
+    public Set<Document> getCreatedDocuments() {
+        return createdDocuments;
+    }
+
+    public void setCreatedDocuments(Set<Document> createdDocuments) {
+        this.createdDocuments = createdDocuments;
     }
 
     public Role getRole() {
