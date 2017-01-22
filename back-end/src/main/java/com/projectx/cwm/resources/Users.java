@@ -50,8 +50,8 @@ public class Users {
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<?> getUsers() {
-//        UserLoginDetails loggedUser = Utils.getUserDetails();
-        UserLoginDetails loggedUser = null;
+        UserLoginDetails loggedUser = Utils.getUserDetails();
+//        UserLoginDetails loggedUser = null;
 
         logger.info("Getting all users.");
         Set<UserModel> userModels = userService.getUsers(loggedUser);
