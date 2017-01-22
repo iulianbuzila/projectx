@@ -18,7 +18,7 @@ function UserService($http, $timeout) {
             method: 'GET',
             url: $APP.server + 'api/users',
             headers: {
-                'Authorization': "Basic " + window.btoa("admin:admin")
+                'Authorization': sessionStorage.getItem("token")
             },
             parms: {
                 id: id
@@ -37,7 +37,7 @@ function UserService($http, $timeout) {
             method: 'GET',
             url: $APP.server + 'api/users/',
             headers: {
-                'Authorization': "Basic " + window.btoa("admin:admin")
+                'Authorization': sessionStorage.getItem("token")
             },
         })
             .success(function (result) {
@@ -53,7 +53,7 @@ function UserService($http, $timeout) {
             method: 'POST',
             url: $APP.server + 'api/users/',
             headers: {
-                'Authorization': "Basic " + window.btoa("admin:admin")
+                'Authorization': sessionStorage.getItem("token")
             },
             data: data
         })
@@ -70,7 +70,7 @@ function UserService($http, $timeout) {
             method: 'PUT',
             url: $APP.server + 'api/users/' + id,
             headers: {
-                'Authorization': "Basic " + window.btoa("admin:admin")
+                'Authorization': sessionStorage.getItem("token")
             },
             // params: {
             //     userId: id
@@ -90,7 +90,7 @@ function UserService($http, $timeout) {
             method: 'DELETE',
             url: $APP.server + 'api/users/' + id,
             headers: {
-                'Authorization': "Basic " + window.btoa("admin:admin")
+                'Authorization': sessionStorage.getItem("token")
             },
             // params: {
             //     userId: id
