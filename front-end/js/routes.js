@@ -27,5 +27,9 @@ function appconfig($stateProvider, $urlRouterProvider) {
             templateUrl: "templates/roles.html",
             controller: "RolesCtrl as vm"
         })
+        // .directive( {
+        //     templateUrl: 'templates/document.html',
+        //     controller: 'HomeCtrl as vm'
+        // })
     $urlRouterProvider.otherwise('/login'); //hardcoded for start
 }

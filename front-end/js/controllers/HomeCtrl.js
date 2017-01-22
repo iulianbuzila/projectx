@@ -1,17 +1,29 @@
-angular.module($APP.name).controller('HomeCtrl', HomeCtrl)
+var app = angular.module($APP.name);
 
-HomeCtrl.$inject = ['$rootScope', '$timeout', 'UserService', 'AuthService'];
+app.controller('HomeCtrl', HomeCtrl)
+    .directive("page1", function(){
+        return {
+            restricted: 'a',
+            templateUrl: 'templates/document.html',
+            controller: 'HomeCtrl'
+        }
+    });
 
-function HomeCtrl($rootScope, $timeout, UserService, AuthService) {
+HomeCtrl.$inject = ['$rootScope', '$timeout', 'UserService', 'AuthService', '$compile', '$scope'];
+// HomeDirective.$inject = ['$scope'];
+
+function HomeCtrl($rootScope, $timeout, UserService, AuthService, $compile, $scope) {
     var vm = this;
     vm.select = select;
     vm.update = update;
     vm.remove = remove;
     vm.toggleCreate = toggleCreate;
     vm.reload = reload;
-
+    vm.deleteDocument = deleteDocument;
+    vm.documents = {};
 
     vm.user = {};
+    vm.document = {};
     vm.edit = false;
     reload();
 
@@ -61,4 +73,10 @@ function HomeCtrl($rootScope, $timeout, UserService, AuthService) {
             vm.list = result;
         })
     }
+
+    function deleteDocument(documentname) {
+        console.log(documentname);
+        // DocumentService.remove(vm.document.id)
+    }
+
 }
