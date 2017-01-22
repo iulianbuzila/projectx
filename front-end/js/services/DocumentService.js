@@ -98,12 +98,9 @@ function DocumentService($http, $timeout) {
     function remove(id) {
         return $http({
             method: 'DELETE',
-            url: $APP.server + 'api/documents/{documentId}',
+            url: $APP.server + 'api/documents/' + id,
             headers: {
                 'Authorization': sessionStorage.getItem("token")
-            },
-            params: {
-                documentId: id
             }
         })
             .success(function (result) {

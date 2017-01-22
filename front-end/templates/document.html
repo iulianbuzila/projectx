@@ -1,9 +1,9 @@
-    <div class="col s12 m3" id="{{::scope.uniqueId}}">
+    <div class="col s12 m3" id="{{::document.id}}">
         <div class="card">
             <div class="card-image" align="center" style="padding-bottom: 10px">
                 <div id="delete">
-                    <div class="btn" align="right" id="{{documentname}}"
-                         remove-on-click  ng-click="remove()"
+                    <div class="btn" align="right" id="{{document.id}}"
+                         remove-on-click  ng-click="remove(document.id)"
                          style="width: 100%; margin-bottom: 10px">DELETE</div>
                     <img src="img/document.png" style="width: 150px; height: 150px;">
                 </div>
@@ -13,14 +13,15 @@
             </div>
             <div class="card-content">
                 <tr>
-                    <th>Added:</th>
-                    <th data-field="added">{{document.date}}</th>
+                    <th>Last Update:</th>
+                    <th data-field="added" type="date" pattern="dd/MM/YYYY">
+                        {{document.dateOfLastUpdate.dayOfMonth}}/{{document.dateOfLastUpdate.monthValue}}/{{document.dateOfLastUpdate.year}}</th>
                 </tr>
             </div>
             <div class="card-content">
                 <tr>
                     <th>Version:</th>
-                    <th data-field="status">{{document.status}}</th>
+                    <th data-field="version" ng-model="vm.document.version">{{document.version}}</th>
                 </tr>
             </div>
         </div>
