@@ -21,7 +21,25 @@ app.controller('HomeCtrl', HomeCtrl)
                 console.log(scope.uniqueId);
             }
         }
-    });
+    })
+    .directive("fileread", [function () {
+        return {
+            scope: {
+                fileread: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    var reader = new FileReader();
+                    reader.onload = function (loadEvent) {
+                        scope.$apply(function () {
+                            scope.fileread = loadEvent.target.result;
+                        });
+                    };
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            }
+        }
+    }]);
 
 HomeCtrl.$inject = ['$rootScope', '$timeout', 'UserService','DocumentService', 'AuthService', '$compile', '$scope'];
 
@@ -38,20 +56,20 @@ function HomeCtrl($rootScope, $timeout, UserService, DocumentService, AuthServic
 
     getDocuments();
 
-    // $scope.documents = [
-    //     {name:"AAA",date:"11-02-02",status:"1.0"},
-    //     {name:"ABB",date:"11-11-11",status:"1.0"},
-    //     {name:"ACC",date:"11-12-12",status:"2.0"},
-    //     {name:"ADD",date:"11-02-02",status:"2.0"},
-    //     {name:"AEE",date:"11-02-02",status:"1.0"},
-    //     {name:"AFF",date:"11-02-02",status:"1.0"},
-    //     {name:"ADD",date:"11-02-02",status:"2.0"},
-    //     {name:"AEE",date:"11-02-02",status:"1.0"},
-    //     {name:"AFF",date:"11-02-02",status:"1.0"},
-    //     {name:"ADD",date:"11-02-02",status:"2.0"},
-    //     {name:"AEE",date:"11-02-02",status:"1.0"},
-    //     {name:"AFF",date:"11-02-02",status:"1.0"},
-    //     {name:"BBB",date:"TypeBBB",status:"2.0"}];
+    $scope.documents = [
+        {name:"Fisier 1",date:"11-02-02",status:"1.0"},
+        {name:"Fisier 2",date:"11-11-11",status:"1.0"},
+        {name:"Fisier 3",date:"11-12-12",status:"2.0"},
+        {name:"Fisier 4",date:"11-02-02",status:"2.0"},
+        {name:"Fisier 5",date:"11-02-02",status:"1.0"},
+        {name:"AFF",date:"11-02-02",status:"1.0"},
+        {name:"ADD",date:"11-02-02",status:"2.0"},
+        {name:"AEE",date:"11-02-02",status:"1.0"},
+        {name:"AFF",date:"11-02-02",status:"1.0"},
+        {name:"ADD",date:"11-02-02",status:"2.0"},
+        {name:"AEE",date:"11-02-02",status:"1.0"},
+        {name:"AFF",date:"11-02-02",status:"1.0"},
+        {name:"BBB",date:"TypeBBB",status:"2.0"}];
 
     vm.user = {};
     vm.document = {};
@@ -110,10 +128,21 @@ function HomeCtrl($rootScope, $timeout, UserService, DocumentService, AuthServic
 
     function addDocument(){
         var fd = new FormData();
-        fd.append('file', vm.document.file);
+        fd.append('data', vm.document.file);
+        fd.append('name', vm.document.tag);
+        fd.append('keyword', vm.document.tag);
+        fd.append('abstract', vm.document.description);
 
-        console.log(vm.document.tag + "  " + vm.document.description);
-        DocumentService.create(fd, vm.document.tag, vm.document.description, "")
+        // for (var pair of fd.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]);
+        // }
+        DocumentService.create(fd, vm.document.tag, vm.document.description, "12312")
+            .success(function(result) {
+               console.log(result);
+            })
+            .error(function(status) {
+               console.log(status);
+            })
     }
 
     function getDocuments(){

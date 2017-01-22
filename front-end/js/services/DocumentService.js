@@ -51,18 +51,21 @@ function DocumentService($http, $timeout) {
             })
     }
 
-    function create(data, name, keyword, abstract) {
+    function create(formData, name, keyword, abstract) {
         return $http({
             method: 'POST',
             url: $APP.server + 'api/documents/',
             headers: {
                 'Authorization': sessionStorage.getItem("token"),
-                'content-type': 'multipart/formdata;boundary=--gc0p4Jq0M2Yt08jU534c0p'
-    },
-            data: data,
-            name: name,
-            keyword: keyword,
-            abstract: abstract
+                'Accept': '*/*',
+                'Content-Type': undefined
+                // 'Content-Type': '*/*'
+            },
+
+            // data: formData
+            transformRequest: angular.identity,
+            data:formData
+
         })
             .success(function (result) {
                 return result;
