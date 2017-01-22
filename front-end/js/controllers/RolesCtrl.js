@@ -4,46 +4,71 @@
 
 angular.module($APP.name).controller('RolesCtrl', RolesCtrl)
 
-RolesCtrl.$inject = ['$rootScope', '$state', 'AuthService', '$timeout'];
+RolesCtrl.$inject = ['$rootScope', '$timeout', 'UserService', 'AuthService'];
 
-function RolesCtrl($rootScope, $state, AuthService, $timeout) {
+function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
     var vm = this;
-    vm.user = {
-        username: '',
-        password: '',
-        remember: false
+    vm.select = select;
+    vm.update = update;
+    vm.remove = remove;
+    vm.toggleCreate = toggleCreate;
+    vm.reload = reload;
+
+    vm.user = {};
+    vm.edit = false;
+    reload();
+
+    $timeout(function() {
+        $('select').material_select();
+    });
+
+    function select(row) {
+        console.log(row);
+        if (vm.user.username) {
+            $('#' + vm.user.username).removeClass('active')
+        }
+        $('#' + row.username).addClass('active');
+
+        if (vm.user.email) {
+            $('#' + vm.user.email).removeClass('active')
+            console.log(vm.user.email);
+        }
+        $('#' + row.email).addClass('active');
+
+        vm.edit = true;
+        vm.user = angular.copy(row);
+        $timeout(function() {
+            $('select').material_select();
+        });
+        $('#username').addClass('active');
+        // $('#email').addClass('active');
     }
 
-    vm.login = login;
-    vm.forgotPassword = forgotPassword;
-
-    if(localStorage.getObject('px.user.remember')){
-        vm.user = localStorage.getObject('px.user.remember');
-        $('.input-field label').addClass('active');
+    function toggleCreate() {
+        if (vm.user && vm.user.username) {
+            console.log(vm.user.username);
+            $('#' + vm.user.username).removeClass('active')
+        }
+        vm.edit = false;
+        delete vm.user;
+        $timeout(function() {
+            $('select').material_select();
+        });
     }
 
-    function login() {
-        AuthService.login(vm.user)
-            .success(function(result) {
-                localStorage.setObject('px.user.current', result);
-                localStorage.setObject('px.user.hack', vm.user);
-                if(vm.user.remember){
-                    localStorage.setObject('px.user.remember', vm.user);
-                }
-                else{
-                    localStorage.removeItem('px.user.remember');
-                }
-                $state.go('app.home');
-            })
-            .error(function(status) {
-                $timeout(function() {
-                    $('#user').addClass('invalid')
-                    $('#password').addClass('invalid')
-                });
-            })
+    function update() {
+        UserService.update(vm.user.id, vm.user)
+        // console.log(vm.user);
+    }
+    function remove() {
+        UserService.remove(vm.user.id)
+        // console.log(vm.user);
     }
 
-    function forgotPassword() {
-        $state.go('forgotPassword');
+    function reload() {
+        UserService.list().success(function(result) {
+            vm.list = result;
+            console.log(result);
+        })
     }
 }
