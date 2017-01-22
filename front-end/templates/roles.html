@@ -5,9 +5,9 @@
                 <thead>
                 <tr>
                     <th data-field="user">Username</th>
-                    <th data-field="role">Email</th>
+                    <th data-field="email">Email</th>
                     <th data-field="role">Role</th>
-                    <th data-field="role">Group</th>
+                    <th data-field="group">Group</th>
                 </tr>
                 </thead>
 
@@ -44,24 +44,24 @@
                             <label>Role</label>
                         </div>
                         <div class="input-field col s12">
-                            <input id="last_name" type="text" class="validate" ng-model="vm.user.username">
-                            <label id='username' for="last_name">Username</label>
+                            <input id="label_active" type="text" class="validate" ng-model="vm.user.username">
+                            <label id='username'>Username</label>
                         </div>
                         <div class="input-field col s12">
-                            <input id="email" type="text" class="validate" ng-model="vm.user.email" readonly>
-                            <label id='email' for="last_name">Email</label>
+                            <input type="text" class="validate" ng-model="vm.user.email" readonly>
+                            <label id='email'>Email</label>
                         </div>
                         <div class="input-field col s12">
-                            <input id="last_name" type="text" class="validate" ng-model="vm.user.firstName">
-                            <label id='username' for="last_name">First Name</label>
+                            <input id="first_name" type="text" class="validate" ng-model="vm.user.firstName">
+                            <label id="firstName">First Name</label>
                         </div>
-                        <div class="input-field col s12">
-                            <input id="last_name" type="text" class="validate" ng-model="vm.user.lastName">
-                            <label id='username' for="last_name">Last Name</label>
+                        <div class="input-field col s12" >
+                            <input type="text" class="validate" ng-model="vm.user.lastName">
+                            <label id='lastName' >Last Name</label>
                         </div>
                         <div class="input-field col s12" ng-if="!vm.edit">
-                            <input id="last_name" type="password" class="validate" ng-model="vm.user.password">
-                            <label for="last_name">Password</label>
+                            <input  type="password" class="validate" ng-model="vm.user.password">
+                            <label >Password</label>
                         </div>
                         <div class="col s12">
                             <a class="waves-effect waves-light btn " ng-if="vm.edit" ng-click="vm.update()">Update</a>

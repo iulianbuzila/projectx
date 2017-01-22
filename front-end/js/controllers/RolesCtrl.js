@@ -14,7 +14,9 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
     vm.toggleCreate = toggleCreate;
     vm.reload = reload;
 
-    vm.user = {};
+    vm.user = {
+        username:''
+    };
     vm.edit = false;
     reload();
 
@@ -29,11 +31,11 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
         }
         $('#' + row.username).addClass('active');
 
-        if (vm.user.email) {
-            $('#' + vm.user.email).removeClass('active')
-            console.log(vm.user.email);
-        }
-        $('#' + row.email).addClass('active');
+        // if (vm.user.email) {
+        //     $('#' + vm.user.email).removeClass('active')
+        //     console.log(vm.user.email);
+        // }
+        // $('#' + row.email).addClass('active');
 
         vm.edit = true;
         vm.user = angular.copy(row);
@@ -41,7 +43,10 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
             $('select').material_select();
         });
         $('#username').addClass('active');
-        // $('#email').addClass('active');
+        $('#email').addClass('active');
+        $('#firstName').addClass('active');
+        $('#lastName').addClass('active');
+
     }
 
     function toggleCreate() {
@@ -49,6 +54,11 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
             console.log(vm.user.username);
             $('#' + vm.user.username).removeClass('active')
         }
+        // if (vm.user && vm.user.email) {
+        //     console.log(vm.user.email);
+        //     $('#' + vm.user.email).removeClass('active')
+        // }
+
         vm.edit = false;
         delete vm.user;
         $timeout(function() {
@@ -75,7 +85,7 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
     function reload() {
         UserService.list().success(function(result) {
             vm.list = result;
-            userGroups(user.id);
+            userGroups(vm.user.id);
             console.log(result);
         })
     }
