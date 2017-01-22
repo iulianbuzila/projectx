@@ -11,6 +11,7 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
     vm.select = select;
     vm.update = update;
     vm.remove = remove;
+    vm.create = create;
     vm.toggleCreate = toggleCreate;
     vm.reload = reload;
 
@@ -66,13 +67,18 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
         });
     }
 
+    function create() {
+        UserService.create(vm.user);
+        window.location.reload();
+    }
+
     function update() {
-        UserService.update(vm.user.id, vm.user)
-        // console.log(vm.user);
+        UserService.update(vm.user.id, vm.user);
+        window.location.reload();
     }
     function remove() {
-        UserService.remove(vm.user.id)
-        // console.log(vm.user);
+        UserService.remove(vm.user.id);
+        window.location.reload();
     }
 
     function userGroups() {
@@ -85,7 +91,7 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
     function reload() {
         UserService.list().success(function(result) {
             vm.list = result;
-            userGroups(vm.user.id);
+            // userGroups(vm.user.id);
             console.log(result);
         })
     }

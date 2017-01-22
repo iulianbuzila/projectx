@@ -48,7 +48,7 @@
                             <label id='username'>Username</label>
                         </div>
                         <div class="input-field col s12">
-                            <input type="text" class="validate" ng-model="vm.user.email" readonly>
+                            <input type="text" class="validate" ng-model="vm.user.email">
                             <label id='email'>Email</label>
                         </div>
                         <div class="input-field col s12">
@@ -66,7 +66,7 @@
                         <div class="col s12">
                             <a class="waves-effect waves-light btn " ng-if="vm.edit" ng-click="vm.update()">Update</a>
                             <a class="waves-effect waves-light btn red" ng-if="vm.edit"  ng-click="vm.remove()">Delete</a>
-                            <a class="waves-effect waves-light btn" ng-if="!vm.edit">Create</a>
+                            <a class="waves-effect waves-light btn" ng-if="!vm.edit" ng-click="vm.create()">Create</a>
                         </div>
                     </div>
                 </form>
