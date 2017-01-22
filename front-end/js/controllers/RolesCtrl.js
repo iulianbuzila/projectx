@@ -1,8 +1,12 @@
-angular.module($APP.name).controller('LoginCtrl', LoginCtrl)
+/**
+ * Created by iulia on 1/22/2017.
+ */
 
-LoginCtrl.$inject = ['$rootScope', '$state', 'AuthService', '$timeout'];
+angular.module($APP.name).controller('RolesCtrl', RolesCtrl)
 
-function LoginCtrl($rootScope, $state, AuthService, $timeout) {
+RolesCtrl.$inject = ['$rootScope', '$state', 'AuthService', '$timeout'];
+
+function RolesCtrl($rootScope, $state, AuthService, $timeout) {
     var vm = this;
     vm.user = {
         username: '',
@@ -14,8 +18,8 @@ function LoginCtrl($rootScope, $state, AuthService, $timeout) {
     vm.forgotPassword = forgotPassword;
 
     if(localStorage.getObject('px.user.remember')){
-      vm.user = localStorage.getObject('px.user.remember');
-      $('.input-field label').addClass('active');
+        vm.user = localStorage.getObject('px.user.remember');
+        $('.input-field label').addClass('active');
     }
 
     function login() {
@@ -24,10 +28,10 @@ function LoginCtrl($rootScope, $state, AuthService, $timeout) {
                 localStorage.setObject('px.user.current', result);
                 localStorage.setObject('px.user.hack', vm.user);
                 if(vm.user.remember){
-                  localStorage.setObject('px.user.remember', vm.user);
+                    localStorage.setObject('px.user.remember', vm.user);
                 }
                 else{
-                  localStorage.removeItem('px.user.remember');
+                    localStorage.removeItem('px.user.remember');
                 }
                 $state.go('app.home');
             })

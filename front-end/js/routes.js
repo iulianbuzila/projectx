@@ -5,7 +5,7 @@ function appconfig($stateProvider, $urlRouterProvider) {
         .state('app', {
             url: "/",
             templateUrl: "templates/main.html",
-            // controller: "MainCtrl"
+             controller: "AppCtrl as vm"
         })
         .state('login', {
             url: "/login",
@@ -17,10 +17,15 @@ function appconfig($stateProvider, $urlRouterProvider) {
             templateUrl: "templates/home.html",
             controller: "HomeCtrl as vm"
         })
-        .state('app.forgotPassword', {
-            url: "forgotPassword",
+        .state('forgotPassword', {
+            url: "/forgotPassword",
             templateUrl: "templates/forgotPassword.html",
             controller: "ForgotPasswordCtrl as vm"
+        })
+        .state('app.roles', {
+            url: "roles",
+            templateUrl: "templates/roles.html",
+            controller: "RolesCtrl as vm"
         })
     $urlRouterProvider.otherwise('/login'); //hardcoded for start
 }

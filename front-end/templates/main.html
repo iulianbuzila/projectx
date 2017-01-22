@@ -1,12 +1,32 @@
 <nav class="nav-wrapper row blue-grey darken-4">
+
+
+
     <div class="col s12">
-        <a class="brand-logo">Project<span>X</span>
-        </a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <ul>
+
             <li>
-                <a>My account</a>
+                <div class="brand-logo">Project<span>X</span></div>
             </li>
+
+            <li>
+                <a class="waves-effect waves-light dropdown-button btn px-wrapper"  dropdown data-hover="true"
+                   style="margin-left: 170px;" data-activates='dropdown1'>
+                    Users
+                </a>
+            </li>
+
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a>My account</a>
+                </li>
+            </ul>
         </ul>
     </div>
 </nav>
 <div ui-view class="col s12"></div>
+
+<!-- Dropdown Structure -->
+<ul id='dropdown1' class='dropdown-content'>
+    <li><a  ng-click="vm.Roles()">Roles</a></li>
+</ul>

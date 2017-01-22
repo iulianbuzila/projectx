@@ -20,6 +20,12 @@ function AuthService($http, $timeout) {
             })
             .success(function(result, status, headers, config) {
                 console.log(config);
+
+                var keyNames = Object.keys(result);
+                for (var i in keyNames) {
+                    console.log(i);
+                }
+
                 return result;
             })
             .error(function(data, status) {
