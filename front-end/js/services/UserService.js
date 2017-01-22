@@ -9,7 +9,8 @@ function UserService($http, $timeout) {
         create: create,
         update: update,
         remove: remove,
-        forgotPassword: forgotPassword
+        forgotPassword: forgotPassword,
+        userGroups: userGroups
     }
     return service;
 
@@ -36,6 +37,22 @@ function UserService($http, $timeout) {
         return $http({
             method: 'GET',
             url: $APP.server + 'api/users/',
+            headers: {
+                'Authorization': sessionStorage.getItem("token")
+            },
+        })
+            .success(function (result) {
+                return result;
+            })
+            .error(function (data, status) {
+                return status;
+            })
+    }
+
+    function userGroups(userId) {
+        return $http({
+            method: 'GET',
+            url: $APP.server + 'api/users/group/' + userId,
             headers: {
                 'Authorization': sessionStorage.getItem("token")
             },
