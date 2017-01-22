@@ -2,17 +2,30 @@ var app = angular.module($APP.name);
 
 app.controller('HomeCtrl', HomeCtrl)
     .directive("page1", function(){
+        var uniqueId = 1;
         return {
-            restricted: 'a',
+            restricted: 'e',
+            transclude: true,
+            scope: {
+                document: '='
+            },
             templateUrl: 'templates/document.html',
-            controller: 'HomeCtrl'
+            controller: 'HomeCtrl',
+            link: function(scope, element, attrs){
+                scope.uniqueId = uniqueId++;
+
+                scope.remove = function() {
+                    element.html('');
+                };
+
+                console.log(scope.uniqueId);
+            }
         }
     });
 
-HomeCtrl.$inject = ['$rootScope', '$timeout', 'UserService', 'AuthService', '$compile', '$scope'];
-// HomeDirective.$inject = ['$scope'];
+HomeCtrl.$inject = ['$rootScope', '$timeout', 'UserService','DocumentService', 'AuthService', '$compile', '$scope'];
 
-function HomeCtrl($rootScope, $timeout, UserService, AuthService, $compile, $scope) {
+function HomeCtrl($rootScope, $timeout, UserService, DocumentService, AuthService, $compile, $scope) {
     var vm = this;
     vm.select = select;
     vm.update = update;
@@ -20,7 +33,25 @@ function HomeCtrl($rootScope, $timeout, UserService, AuthService, $compile, $sco
     vm.toggleCreate = toggleCreate;
     vm.reload = reload;
     vm.deleteDocument = deleteDocument;
-    vm.documents = {};
+    vm.addDocument = addDocument;
+    vm.getDocuments = getDocuments;
+
+    getDocuments();
+
+    // $scope.documents = [
+    //     {name:"AAA",date:"11-02-02",status:"1.0"},
+    //     {name:"ABB",date:"11-11-11",status:"1.0"},
+    //     {name:"ACC",date:"11-12-12",status:"2.0"},
+    //     {name:"ADD",date:"11-02-02",status:"2.0"},
+    //     {name:"AEE",date:"11-02-02",status:"1.0"},
+    //     {name:"AFF",date:"11-02-02",status:"1.0"},
+    //     {name:"ADD",date:"11-02-02",status:"2.0"},
+    //     {name:"AEE",date:"11-02-02",status:"1.0"},
+    //     {name:"AFF",date:"11-02-02",status:"1.0"},
+    //     {name:"ADD",date:"11-02-02",status:"2.0"},
+    //     {name:"AEE",date:"11-02-02",status:"1.0"},
+    //     {name:"AFF",date:"11-02-02",status:"1.0"},
+    //     {name:"BBB",date:"TypeBBB",status:"2.0"}];
 
     vm.user = {};
     vm.document = {};
@@ -30,8 +61,6 @@ function HomeCtrl($rootScope, $timeout, UserService, AuthService, $compile, $sco
     $timeout(function() {
         $('select').material_select();
     });
-
-
 
     function select(row) {
         console.log(row);
@@ -74,9 +103,25 @@ function HomeCtrl($rootScope, $timeout, UserService, AuthService, $compile, $sco
         })
     }
 
-    function deleteDocument(documentname) {
-        console.log(documentname);
-        // DocumentService.remove(vm.document.id)
+    function deleteDocument(documentid) {
+        console.log(documentid);
+        DocumentService.remove(vm.document.id)
+    }
+
+    function addDocument(){
+        var fd = new FormData();
+        fd.append('file', vm.document.file);
+
+        console.log(vm.document.tag + "  " + vm.document.description);
+        DocumentService.create(fd, vm.document.tag, vm.document.description, "")
+    }
+
+    function getDocuments(){
+        DocumentService.list().success(function(result) {
+            vm.documents = result;
+            $scope.documents = result;
+            console.log(result);
+        });
     }
 
 }

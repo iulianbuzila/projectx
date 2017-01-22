@@ -3,17 +3,17 @@
         <div class="col s6">
             <table class="striped responsive">
                 <thead>
-                    <tr>
-                        <th data-field="user">User</th>
-                        <th data-field="role">Role</th>
-                    </tr>
+                <tr>
+                    <th data-field="user">User</th>
+                    <th data-field="role">Role</th>
+                </tr>
                 </thead>
 
                 <tbody>
-                    <tr id="{{row.username}}" ng-repeat="row in vm.list" ng-click="vm.select(row)">
-                        <td>{{row.username}}</td>
-                        <td>{{row.role}}</td>
-                    </tr>
+                <tr id="{{row.username}}" ng-repeat="row in vm.list" ng-click="vm.select(row)">
+                    <td>{{row.username}}</td>
+                    <td>{{row.role}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -49,7 +49,8 @@
                         </div>
                         <div class="col s12">
                             <a class="waves-effect waves-light btn " ng-if="vm.edit" ng-click="vm.update()">Update</a>
-                            <a class="waves-effect waves-light btn red" ng-if="vm.edit"  ng-click="vm.remove()">Delete</a>
+                            <a class="waves-effect waves-light btn red" ng-if="vm.edit"
+                               ng-click="vm.remove()">Delete</a>
                             <a class="waves-effect waves-light btn" ng-if="!vm.edit">Create</a>
                         </div>
                     </div>
@@ -58,14 +59,34 @@
         </div>
     </div>
 
-  <div class=" row">
-      <page1></page1>
-      <page1></page1>
-      <page1></page1>
-      <page1></page1>
-      <page1></page1>
-      <page1></page1>
-      <page1></page1>
-  </div>
+
+    <div class="row ">
+        <div class="input-field col s7">
+            <input id="tag" type="text" class="validate" ng-model="vm.document.tag">
+            <label for="tag">Tag</label>
+
+        </div>
+
+        <div class="input-field col s7">
+            <input id="description" type="text" class="validate" ng-model="vm.document.description">
+            <label for="description">Description</label>
+        </div>
+
+        <div class="input-field col s7">
+            <input type="file" class="file-field" ng-model="vm.document.file"/>
+        </div>
+
+        <div class="input-field col s7">
+            <Button class="waves-effect waves-light btn" ng-click="vm.addDocument()">Add Document</Button>
+        </div>
+
+    </div>
+
+
+    <div class="divider" style="margin: 35px; height: 3px "></div>
+
+    <div class=" row">
+        <page1 ng-repeat="document in documents" document="document"></page1>
+    </div>
 
 </div>

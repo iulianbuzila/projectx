@@ -1,25 +1,26 @@
-    <div class="col s12 m3">
+    <div class="col s12 m3" id="{{::scope.uniqueId}}">
         <div class="card">
             <div class="card-image" align="center" style="padding-bottom: 10px">
-                <div>
-                    <div class="btn" align="right" id="{{documentname}}" ng-click="vm.deleteDocument(documentname)"
+                <div id="delete">
+                    <div class="btn" align="right" id="{{documentname}}"
+                         remove-on-click  ng-click="remove()"
                          style="width: 100%; margin-bottom: 10px">DELETE</div>
                     <img src="img/document.png" style="width: 150px; height: 150px;">
                 </div>
             </div>
             <div class="card-action">
-                <a data-field="name"  ng-model="vm.document.name" id='documentname'>name</a>
+                <a data-field="name"  ng-model="vm.document.name" id='documentname'>{{document.name}}</a>
             </div>
             <div class="card-content">
                 <tr>
                     <th>Added:</th>
-                    <th data-field="added">Date</th>
+                    <th data-field="added">{{document.date}}</th>
                 </tr>
             </div>
             <div class="card-content">
                 <tr>
-                    <th>Status:</th>
-                    <th data-field="status">Status</th>
+                    <th>Version:</th>
+                    <th data-field="status">{{document.status}}</th>
                 </tr>
             </div>
         </div>
