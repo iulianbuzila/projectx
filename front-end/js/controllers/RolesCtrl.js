@@ -51,17 +51,17 @@ function RolesCtrl($rootScope, $timeout, UserService, AuthService) {
     }
 
     function toggleCreate() {
-        if (vm.user && vm.user.username) {
-            console.log(vm.user.username);
-            $('#' + vm.user.username).removeClass('active')
-        }
+        // if (vm.user && vm.user.username) {
+        //     console.log(vm.user.username);
+        //     $('#' + vm.user.username).removeClass('active')
+        // }
         // if (vm.user && vm.user.email) {
         //     console.log(vm.user.email);
         //     $('#' + vm.user.email).removeClass('active')
         // }
 
         vm.edit = false;
-        delete vm.user;
+        window.location.reload();
         $timeout(function() {
             $('select').material_select();
         });
