@@ -12,7 +12,8 @@ function DocumentService($http, $timeout) {
         list: list,
         create: create,
         update: update,
-        remove: remove
+        remove: remove,
+        download: download
     }
     return service;
 
@@ -102,6 +103,23 @@ function DocumentService($http, $timeout) {
             headers: {
                 'Authorization': sessionStorage.getItem("token")
             }
+        })
+            .success(function (result) {
+                return result;
+            })
+            .error(function (data, status) {
+                return status;
+            })
+    }
+
+    function download(id) {
+        return $http({
+            method: 'GET',
+            url: $APP.server + 'api/documents/download/' + id,
+            headers: {
+                'Authorization': sessionStorage.getItem("token")
+            },
+            responseType: 'arraybuffer'
         })
             .success(function (result) {
                 return result;

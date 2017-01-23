@@ -15,11 +15,29 @@ app.controller('HomeCtrl', HomeCtrl)
                 scope.uniqueId = document.id;
 
                 scope.remove = remove;
+                scope.download = download;
                 function remove(id) {
                     console.log(id);
                     DocumentService.remove(id)
                         .success(function (result) {
                             element.html('');
+                            console.log(result);
+                        })
+                        .error(function (status) {
+                            console.log(status);
+                        });
+                }
+                function download(id) {
+                    console.log(id);
+                    DocumentService.download(id)
+                        .success(function (result) {
+                            try {
+                                var b = new Blob([result], {type: "application/octet-stream"});
+                                console.log(scope.document.name);
+                                saveAs(b, scope.document.name);
+                            } catch (e) {
+                                window.open("data:application/octet-stream" + "," + encodeURIComponent(result), '_blank', '');
+                            }
                             console.log(result);
                         })
                         .error(function (status) {
@@ -46,6 +64,11 @@ app.controller('HomeCtrl', HomeCtrl)
                 });
             }
         }
+    }]);
+
+app.config(['$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
     }]);
 
 HomeCtrl.$inject = ['$rootScope', '$timeout', 'UserService','DocumentService', 'AuthService', '$compile', '$scope'];
@@ -79,7 +102,7 @@ function HomeCtrl($rootScope, $timeout, UserService, DocumentService, AuthServic
     $timeout(function() {
         $('select').material_select();
     });
-    
+
     function addDocument(){
         var fd = new FormData();
         fd.append('data', vm.document.file);

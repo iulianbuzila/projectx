@@ -1,8 +1,13 @@
-    <div class="col s12 m3" id="{{::document.id}}">
+    <div class="col s12 m3" id="{{::document.id}}" style="max-height: 400px;">
         <div class="card">
             <div class="card-image" align="center" style="padding-bottom: 10px">
+                <div >
+                    <a class="btn" align="right"
+                         remove-on-click  ng-click="download(document.id)"
+                         style="width: 100%; margin-bottom: 10px">DOWNLOAD</a>
+                </div>
                 <div id="delete">
-                    <div class="btn" align="right" id="{{document.id}}"
+                    <div class="btn red" align="right" id="{{document.id}}"
                          remove-on-click  ng-click="remove(document.id)"
                          style="width: 100%; margin-bottom: 10px">DELETE</div>
                     <img src="img/document.png" style="width: 150px; height: 150px;">
